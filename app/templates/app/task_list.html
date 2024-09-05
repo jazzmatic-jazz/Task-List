@@ -1,0 +1,78 @@
+{% extends "app/base.html" %}
+
+{%block title%} Task {%endblock title%}
+
+<style>
+    /* Center everything on the page */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        text-align: center;
+    }
+</style>
+
+{%block content%}
+
+<div class="container">
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/task">
+                <h1>Task List</h1>
+            </a>
+        </div>
+    </nav>
+
+    
+
+    <form method="post">
+
+        {% csrf_token %}
+
+       <label for="status">Filter by Status:</label>
+        <select name="status" id="status">
+            <option value="">All</option>
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+        </select>
+
+        <label for="sort_by">Sort by:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="">All</option>
+            <option value="priority">Priority</option>
+            <option value="due_date">Due Date</option>
+        </select>
+
+        <button type="submit">Apply</button>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for task in tasks %}
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.get_priority_display }}</td>
+                <td>{{ task.get_status_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</div>
+{%endblock content%}
