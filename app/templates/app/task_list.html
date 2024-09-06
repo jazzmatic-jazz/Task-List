@@ -1,18 +1,9 @@
 {% extends "app/base.html" %}
 
-{%block title%} Task {%endblock title%}
+{%block title%} Task - List {%endblock title%}
 
 <style>
     /* Center everything on the page */
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
-
     .container {
         text-align: center;
     }
@@ -21,40 +12,52 @@
 {%block content%}
 
 <div class="container">
-    <nav class="navbar navbar-light bg-light">
+    <!-- Navbar -->
+
+    <nav class="navbar sticky-top navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/task">
-                <h1>Task List</h1>
-            </a>
+            <a class="navbar-brand" href="/task/">Task List</a>
         </div>
+       
     </nav>
-
-    
-
+    <br>
+ 
     <form method="post">
 
         {% csrf_token %}
+        <!-- Status Dropdown -->
 
-       <label for="status">Filter by Status:</label>
-        <select name="status" id="status">
-            <option value="">All</option>
-            <option value="todo">To Do</option>
-            <option value="in_progress">In Progress</option>
-            <option value="done">Done</option>
-        </select>
+        <div class="d-flex justify-content-end">
+            <div class="col-md-2">
+                <label for="status" class="me-2">Status:</label>
+                <select class="form-select me-2" name="status" id="status" aria-label="Default select example">
+                    <option selected value="None">All</option>
+                    {%for value, label in render_status %}
+                    <option value="{{value}}">{{label | title}}</option>
+                    {%endfor%}
 
-        <label for="sort_by">Sort by:</label>
-        <select name="sort_by" id="sort_by">
-            <option value="">All</option>
-            <option value="priority">Priority</option>
-            <option value="due_date">Due Date</option>
-        </select>
+                </select>
+            </div>
+            <!-- Sorting dropdown -->
+            <div class="col-md-2">
+                <label for="sort_by">Sort by:</label>
+                <select class="form-select me-2" name="sort_by" id="sort_by" aria-label="Default select example">
+                    <option selected value="None">All</option>
+                    <option value="priority">Priority</option>
+                    <option value="due_date">Due Date</option>
+                   </select>
+            </div>
+            
+            <div class="btn" style="padding: 20px;">
+                <button class="btn btn-outline-success" type="submit">Apply</button>
+            </div>
+        </div>
 
-        <button type="submit">Apply</button>
     </form>
+   <br>
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-secondary table-hover table-bordered border-primary">
+        <thead class="table-dark">
             <tr>
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>
@@ -74,5 +77,7 @@
             </tr>
             {% endfor %}
         </tbody>
+
 </div>
+
 {%endblock content%}
